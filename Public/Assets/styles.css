@@ -1,0 +1,76 @@
+.domino {
+  width: 900px; /* Ajustez la taille selon vos préférences */
+}
+
+/* Positionnement des joueurs */
+.conteneur-image {
+  position: relative;
+}
+
+/* Style pour les joueurs */
+.joueur {
+  position: absolute;
+  color: white; /* ou toute autre couleur qui contraste avec votre image */
+  font-size: 1em; /* Ajustez la taille du texte si nécessaire */
+  z-index: 10; /* Assurez-vous que le texte apparaît au-dessus de l'image */
+}
+
+/* Position spécifique pour chaque joueur */
+.john {
+  top: 40px; /* Ajustez cette valeur pour déplacer le texte vers le bas */
+  left: 10px; /* Ajustez cette valeur pour déplacer le texte vers la gauche */
+  position: absolute;
+  width: 30px;
+}
+
+.john1 {
+  top: 10px; /* Ajustez cette valeur pour déplacer le texte vers le bas */
+  left: 10px; /* Ajustez cette valeur pour déplacer le texte vers la gauche */
+  position: absolute;
+  width: 30px;
+}
+
+.ruben {
+  top: 40px; /* Ajustez cette valeur pour déplacer le texte vers le bas */
+  left: 840px;
+  right: 50px; /* Ajustez cette valeur pour déplacer le texte vers la droite */
+  position: absolute;
+  width: 30px;
+}
+
+.ruben1 {
+  top: 10px; /* Ajustez cette valeur pour déplacer le texte vers le bas */
+  left: 840px;
+  right: 50px; /* Ajustez cette valeur pour déplacer le texte vers la droite */
+  position: absolute;
+  width: 30px;
+}
+
+.daisy {
+  top: 640px; /* Ajustez cette valeur pour déplacer le texte vers le haut */
+  left: 10px; /* Ajustez cette valeur pour déplacer le texte vers la gauche */
+  position: absolute;
+  width: 30px;
+}
+
+.daisy1 {
+  top: 600px; /* Ajustez cette valeur pour déplacer le texte vers le haut */
+  left: 10px; /* Ajustez cette valeur pour déplacer le texte vers la gauche */
+  position: absolute;
+  width: 30px;
+}
+.berta {
+  top: 640px; /* Ajustez cette valeur pour déplacer le texte vers le haut */
+  left: 840px;
+  right: 0px; /* Ajustez cette valeur pour déplacer le texte vers la droite */
+  position: absolute;
+  width: 30px;
+}
+
+.berta1 {
+  top: 600px; /* Ajustez cette valeur pour déplacer le texte vers le haut */
+  left: 840px;
+  right: 50px; /* Ajustez cette valeur pour déplacer le texte vers la droite */
+  position: absolute;
+  width: 30px;
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeu multijoueurs Domino</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>But du jeu</h1>
+    <p>
+      On commence par mélanger tous les dominos, face cachée au milieu de la
+      table et chaque joueur prend ses dominos de départ qu’il place devant lui
+      en prenant soin de les cacher aux autres joueurs. Les dominos restants
+      composent la pioche (ou le talon) placée à un endroit accessible à tous. À
+      4 joueurs chacun prend 6 dominos. Le joueur ayant le double le plus élevé
+      commence la partie de dominos et pose son domino au centre de la table (si
+      personne n’a le double 6, c’est le double 5 qui commence, etc.… et si
+      personne n’a de double, c'est le domino 6/5 qui commence ou sinon le 6/4,
+      etc...). Le joueur suivant (à gauche du premier joueur) doit poser l’un de
+      ses dominos dont l’un des côtés est identique à un côté du premier domino.
+      Puis c’est au joueur suivant de jouer et ainsi de suite. Les joueurs
+      peuvent poser leur domino à l’une ou l’autre des extrémités de la chaîne.
+      commencer une partie de dominos Dans la chaîne de dominos formée par les
+      joueurs, les doubles sont posés perpendiculairement. Les joueurs peuvent
+      réorienter la chaîne en posant leurs dominos de côté (en coin), mais sans
+      bloquer la chaîne. Si un joueur n’a pas de domino qu’il puisse poser, il
+      pioche un domino (sans le monter aux autres joueurs). S’il peut le poser,
+      il le fait immédiatement, sinon il l’ajoute à ses dominos et passe son
+      tour. Si la pioche est épuisée, le joueur passe son tour directement. Le
+      but du jeu est d’être le premier à poser tous ses dominos. Les autres
+      joueurs qui n'ont pas pu finir, marquent alors autant de points
+      qu’indiqués sur leurs dominos restants. Si la partie est bloquée (aucun
+      joueur ne peut ajouter de domino) chacun compte les points qui lui restent
+      en mains. Une partie peut se jouer sur plusieurs manches, le gagnant est
+      celui qui totalise le moins de points. Si un joueur a dans son jeu les 7
+      dominos d’une série (par exemple du 1/0, 1/1 … au 1/6), la partie est
+      annulée
+    </p>
+    <div class="conteneur-image">
+      <img src="/Public/Assets/Domino.png" alt="Domino" class="domino" />
+      <div class="joueur john">john</div>
+      <img src="/Public/Assets/1joueurs.png" alt="john" class="john1" />
+      <div class="joueur ruben">ruben</div>
+      <img src="/Public/Assets/2joueurs.png" alt="ruben2" class="ruben1" />
+      <div class="joueur daisy">daisy</div>
+      <img src="/Public/Assets/Joueurs3.png" alt="daisy" class="daisy1" />
+      <div class="joueur berta">berta</div>
+      <img src="/Public/Assets/Joueurs4.png" alt="berta" class="berta1" />
+    </div>
+
+    <script src="script.js"></script>
+    <form action="traitement.php" method="post">
+      <label for="joueur1">john:</label>
+      <input
+        type="text"
+        id="joueur1"
+        name="joueur1"
+        placeholder="Pseudonyme"
+        required
+      /><br />
+
+      <label for="joueur2">ruben:</label>
+      <input
+        type="text"
+        id="joueur2"
+        name="joueur2"
+        placeholder="Pseudonyme"
+        required
+      /><br />
+
+      <label for="joueur3">daisy:</label>
+      <input
+        type="text"
+        id="joueur3"
+        name="joueur3"
+        placeholder="Pseudonyme"
+        required
+      /><br />
+
+      <label for="joueur4">berta:</label>
+      <input
+        type="text"
+        id="joueur4"
+        name="joueur4"
+        placeholder="Pseudonyme"
+        required
+      /><br />
+
+      <input type="submit" value="Commencer la partie" />
+    </form>
+  </body>
+</html>
