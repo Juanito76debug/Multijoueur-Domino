@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jeu multijoueurs Domino</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/assets/styles.css" />
   </head>
   <body>
     <h1>But du jeu</h1>
@@ -38,19 +38,52 @@
       annulée
     </p>
     <div class="conteneur-image">
-      <img src="/Public/Assets/Domino.png" alt="Domino" class="domino" />
+      <img
+        src="/assets/tapis.jpg"
+        alt="Plateau de jeu de Domino"
+        class="tapis"
+      />
+      <div class="dominos">
+        <img src="/assets/domino.png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (1).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (2).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (3).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (4).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (5).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (6).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (7).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (8).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (9).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (10).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (11).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (12).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (13).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (14).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (15).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (16).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (17).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (18).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (19).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino(20).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (21).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (22).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (23).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (24).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (25).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (26).png" alt="Domino 0-0" class="domino" />
+        <img src="/assets/domino (27).png" alt="Domino 0-0" class="domino" />
       <div class="joueur john">john</div>
-      <img src="/Public/Assets/1joueurs.png" alt="john" class="john1" />
+      <img src="/assets/1joueurs.png" alt="Avatar de john" class="john1" />
       <div class="joueur ruben">ruben</div>
-      <img src="/Public/Assets/2joueurs.png" alt="ruben2" class="ruben1" />
+      <img src="/assets/2joueurs.png" alt="Avatar de ruben" class="ruben1" />
       <div class="joueur daisy">daisy</div>
-      <img src="/Public/Assets/Joueurs3.png" alt="daisy" class="daisy1" />
+      <img src="/assets/Joueurs3.png" alt="Avatar de daisy" class="daisy1" />
       <div class="joueur berta">berta</div>
-      <img src="/Public/Assets/Joueurs4.png" alt="berta" class="berta1" />
+      <img src="/assets/Joueurs4.png" alt="Avatar de berta" class="berta1" />
     </div>
 
-    <script src="script.js"></script>
-    <form action="traitement.php" method="post">
+    <script src="/assets/script.js"></script>
+    <form action="/formulaire" method="post">
       <label for="joueur1">john:</label>
       <input
         type="text"
@@ -89,5 +122,6 @@
 
       <input type="submit" value="Commencer la partie" />
     </form>
+    <script src="./socket.io/socket.io.min.js"></script>
   </body>
 </html>
