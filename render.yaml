@@ -1,15 +1,15 @@
-# Exported from Render on 2024-03-23T13:35:42Z
+# Exported from Render on 2024-03-24T17:03:19Z
 services:
 - type: web
-  name: Multijoueur-Domino-1
+  name: Multijoueur-Domino-3
   runtime: node
   repo: https://github.com/Juanito76debug/Multijoueur-Domino
-  branch: main
+  branch: master
   plan: free
   envVars:
   - key: Node-version
     sync: false
   region: frankfurt
-  buildCommand: yarn
-  startCommand: node server.js
+  buildCommand: node
+  startCommand: nodemon server.js
 version: "1"
