@@ -4,7 +4,8 @@ const socketIO = require("socket.io");
 const path = require("path");
 const { MongoClient } = require("mongodb");
 const url = "mongodb://localhost:27017";
-const client = new MongoClient(url);
+const client = new MongoClient("mongodb://localhost/multijoueurs-domino");
+const { exec } = require("child_process");
 
 const app = express();
 const server = http.createServer(app);
@@ -15,7 +16,7 @@ let db, dominosCollection;
 async function connectToDb() {
   await client.connect();
   console.log("Connecté à MongoDB");
-  db = client.db("multijoueurs-domino");
+  db = client.db("multijoueur-domino");
   dominosCollection = db.collection("domino");
 }
 connectToDb().catch(console.error);
@@ -75,6 +76,24 @@ app.use((err, req, res, next) => {
   res.status(500).send("Quelque chose s'est mal passé!");
 });
 
+function importCollection() {
+  const command =
+    'mongoimport --url="mongodb://localhost:27017" --collection=domino --db=multijoueur-domino --file=./chemin/vers/package.json';
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      // Une erreur s'est produite lors de l'exécution de la commande
+      console.error(`Erreur lors de l'importation : ${err.message}`);
+      return;
+    }
+    if (stderr) {
+      // Erreur potentielle capturée par stderr
+      console.error(`Erreur lors de l'importation : ${stderr}`);
+      return;
+    }
+    // Sortie de la commande
+    console.log(`Résultat de l'importation : ${stdout}`);
+  });
+}
 function startGame() {
   shuffleAndDistribute();
   io.emit("game_started", gameData);
@@ -136,7 +155,7 @@ function validatePlayerAction(playerName, domino) {
   return true;
 }
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
   console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
