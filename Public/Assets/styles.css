@@ -19,7 +19,7 @@
 .conteneur-image .dominos {
   position: absolute;
   top: 300px;
-  left: 25%;
+  left: 30%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-wrap: wrap;

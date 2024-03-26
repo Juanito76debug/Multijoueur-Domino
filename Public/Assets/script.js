@@ -1,5 +1,4 @@
 window.addEventListener("DOMContentLoaded", () => {
-  // Établissez une connexion Socket.IO avec le serveur
   const socket = io.connect("http://localhost:3000", {
     secure: true,
     reconnection: true,
@@ -11,9 +10,14 @@ window.addEventListener("DOMContentLoaded", () => {
     console.error("Erreur de connexion au serveur:", err);
   });
 
+  socket.on("game_started", (data) => {
+    displayDominos(data.playerHands);
+    handlePlayerTurn(data.currentPlayerIndex);
+  });
+
   socket.on("mise_a_jour", (data) => {
     if (data.playerName && data.domino) {
-      updateGameDisplay(data.playerName, data.domino);
+      updateGameDisplay(data.chain, data.playerName, data.domino);
     }
     if (data.joueur && data.score) {
       const joueurElement = document.getElementById(`score-${data.joueur}`);
@@ -23,7 +27,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Initialisation des dominos
   const dominos = [
     "0/0",
     "0/1",
@@ -55,7 +58,6 @@ window.addEventListener("DOMContentLoaded", () => {
     "6/6",
   ];
 
-  // Initialisation des joueurs et de leurs mains
   const players = ["john", "ruben", "daisy", "berta"];
   let playerHands = {
     john: [],
@@ -64,34 +66,92 @@ window.addEventListener("DOMContentLoaded", () => {
     berta: [],
   };
 
-  // Index du joueur actuel et chaîne de dominos sur la table
   let currentPlayerIndex = 0;
   let chain = [];
 
-  // Mélangez et distribuez les dominos
-  shuffle(dominos);
-  distributeDominos();
-  displayPlayerDominos();
+  const startGameButton = document.getElementById("start-game");
+  const dominoPool = document.getElementById("domino-pool");
 
-  // Fonctions pour la logique du jeu
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+  startGameButton.addEventListener("click", startGame);
+  if (startGameButton) {
+    startGameButton.addEventListener("click", () => {
+      socket.emit("start_game");
+    });
+  } else {
+    console.error("L'élément 'start-game' n'existe pas dans le DOM.");
+  }
+
+  if (dominoPool) {
+    dominoPool.addEventListener("click", (event) => {
+      if (event.target.className === "domino") {
+        const dominoText = event.target.textContent.split("-").join("/");
+        playDomino(players[currentPlayerIndex], dominoText);
+      }
+    });
+  } else {
+    console.error("L'élément 'domino-pool' n'existe pas dans le DOM.");
+  }
+  let selectedDominoId = null;
+  document.addEventListener("keydown", (event) => {
+    if (
+      selectedDominoId &&
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+    ) {
+      const dominoElement = document.getElementById(selectedDominoId);
+      if (dominoElement) {
+        makeDominoMovableWithArrows(dominoElement, event.key);
+      }
+    }
+  });
+
+  // Fonction pour rendre un domino déplaçable par glisser-déposer
+  function makeDominoDraggable(dominoElement) {
+    dominoElement.draggable = true;
+    dominoElement.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("text/plain", event.target.id);
+    });
+  }
+
+  // Exemple d'utilisation des fonctions
+  const dominoElement = document.getElementById("domino"); // Remplacez avec l'ID réel de votre domino
+
+  function startGame() {
+    shuffle(dominos);
+    distributeDominos(dominos, players); // Ajout des paramètres manquants
+    const startingPlayerData = findStartingPlayer(players, playerHands); // Ajout des paramètres manquants
+    if (startingPlayerData.startingPlayer !== null) {
+      currentPlayerIndex = players.indexOf(startingPlayerData.startingPlayer);
+      playDomino(
+        startingPlayerData.startingPlayer,
+        startingPlayerData.startingDomino
+      );
+      updateGameDisplay(
+        chain,
+        startingPlayerData.startingPlayer,
+        startingPlayerData.startingDomino
+      ); // Ajout des paramètres manquants
+    } else {
+      console.error("Aucun joueur de départ valide trouvé.");
+    }
+    displayPlayerDominos();
+  }
+  function shuffle(dominos) {
+    for (let i = dominos.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+      [dominos[i], dominos[j]] = [dominos[j], dominos[i]];
     }
   }
 
-  function createDominoElement(domino) {
-    const [leftValue, rightValue] = domino.split("/");
-    const dominoElement = document.createElement("div");
-    dominoElement.className = "domino";
-    dominoElement.innerHTML = `
-      <div class="domino-half">${leftValue}</div>
-      <div class="domino-half">${rightValue}</div>
-    `;
-    return dominoElement;
+  function distributeDominos(dominos, players) {
+    players.forEach((player) => (playerHands[player] = []));
+    for (const player of players) {
+      playerHands[player] = dominos.splice(0, 7);
+    }
+    dominos.forEach((domino, index) => {
+      playerHands[players[index % players.length]].push(domino);
+    });
+    return findStartingPlayer(players, playerHands);
   }
-
   function displayPlayerDominos() {
     for (const player in playerHands) {
       const playerDominoContainer = document.createElement("div");
@@ -104,8 +164,48 @@ window.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(playerDominoContainer);
     }
   }
+  function findStartingPlayer(players, playerHands) {
+    for (let i = 6; i >= 0; i--) {
+      for (const player of players) {
+        if (playerHands[player].includes(`${i}/${i}`)) {
+          return { startingPlayer: player, startingDomino: `${i}/${i}` };
+        }
+      }
+    }
+    return { startingPlayer: null, startingDomino: null };
+  }
 
-  function updateGameDisplay(playerName, domino) {
+  function createDominoElement(domino) {
+    const dominoElement = document.createElement("div");
+    dominoElement.className = "domino";
+    const [leftValue, rightValue] = domino.split("/");
+    dominoElement.innerHTML = `<div class="domino-half">${leftValue}</div><div class="domino-half">${rightValue}</div>`;
+    return dominoElement;
+  }
+
+  function displayDominos(playerHands) {
+    Object.keys(playerHands).forEach((player) => {
+      const playerDominoContainer = document.getElementById(
+        `dominos-${player}`
+      );
+      if (playerDominoContainer) {
+        playerDominoContainer.innerHTML = "";
+        playerHands[player].forEach((domino) => {
+          playerDominoContainer.appendChild(createDominoElement(domino));
+        });
+      }
+    });
+  }
+
+  function handlePlayerTurn(currentPlayerIndex) {
+    const currentPlayer = players[currentPlayerIndex];
+    console.log(`C'est le tour de ${currentPlayer}`);
+  }
+
+  function updateGameDisplay(chain, playerName, domino) {
+    // Mise à jour de la chaîne de dominos
+    displayDominos(playerHands);
+    // Mise à jour de la main du joueur après avoir joué un domino
     const playerHand = playerHands[playerName];
     const dominoIndex = playerHand.indexOf(domino);
     if (dominoIndex !== -1) {
@@ -125,12 +225,23 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function canPlay(domino, chain) {
-    // Ajoutez ici la logique pour vérifier si un domino peut être joué
-    return true;
+    if (chain.length === 0) {
+      return true;
+    }
+    const [dominoLeft, dominoRight] = domino.split("/").map(Number);
+    const [chainStart, chainEnd] = [
+      chain[0].split("/")[0],
+      chain[chain.length - 1].split("/")[1],
+    ].map(Number);
+    return (
+      dominoLeft === chainStart ||
+      dominoLeft === chainEnd ||
+      dominoRight === chainStart ||
+      dominoRight === chainEnd
+    );
   }
 
   function countPoints(hand) {
-    // Ajoutez ici la logique pour compter les points d'une main
     return hand.reduce((sum, domino) => {
       const values = domino.split("/").map(Number);
       return sum + values[0] + values[1];
@@ -142,7 +253,12 @@ window.addEventListener("DOMContentLoaded", () => {
     if (canPlay(domino, chain)) {
       chain.push(domino);
       playerHand.splice(playerHand.indexOf(domino), 1);
-      socket.emit("action_joueur", { playerName, domino });
+      socket.emit("action_joueur", {
+        playerName,
+        domino,
+        chain,
+        playerHands,
+      });
       console.log(
         `${playerName} a joué ${domino} et il reste ${playerHand.length} dominos dans sa main.`
       );
@@ -150,22 +266,15 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
       console.log(`${playerName} ne peut pas jouer ${domino}.`);
     }
-  }
-
-  function distributeDominos() {
-    for (const player of players) {
-      playerHands[player] = dominos.splice(0, 7);
+    function animateDomino(dominoElement) {
+      dominoElement.style.transition = "transform 0.5s ease-in-out";
+      dominoElement.style.transform = "translateY(-20px)";
+      setTimeout(() => {
+        dominoElement.style.transform = "translateY(0)";
+      }, 500);
     }
   }
 
-  function animateDomino(dominoElement) {
-    dominoElement.style.transition = "transform 0.5s ease-in-out";
-    dominoElement.style.transform = "translateY(-20px)";
-    setTimeout(() => {
-      dominoElement.style.transform = "translateY(0)";
-    }, 500);
-  }
-
-  // Exemple d'utilisation
-  playDomino("john", "3/4");
+  // Suppression de l'appel de test initial
+  //playDomino("john", "3/4");
 });

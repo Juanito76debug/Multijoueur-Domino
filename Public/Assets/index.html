@@ -43,6 +43,7 @@
         alt="Plateau de jeu de Domino"
         class="tapis"
       />
+      <div id="domino-pool" class="dominos"></div>
       <div class="dominos">
         <img src="/assets/domino.png" alt="Domino 0-0" class="domino" />
         <img src="/assets/domino (1).png" alt="Domino 0-0" class="domino" />
@@ -82,6 +83,8 @@
       <img src="/assets/Joueurs4.png" alt="Avatar de berta" class="berta1" />
     </div>
 
+    
+
     <script src="/assets/script.js"></script>
     <form action="/formulaire" method="post">
       <label for="joueur1">john:</label>
@@ -89,7 +92,7 @@
         type="text"
         id="joueur1"
         name="joueur1"
-        placeholder="Pseudonyme"
+        placeholder="Score"
         required
       /><br />
 
@@ -98,7 +101,7 @@
         type="text"
         id="joueur2"
         name="joueur2"
-        placeholder="Pseudonyme"
+        placeholder="Score"
         required
       /><br />
 
@@ -107,7 +110,7 @@
         type="text"
         id="joueur3"
         name="joueur3"
-        placeholder="Pseudonyme"
+        placeholder="Score"
         required
       /><br />
 
@@ -116,11 +119,11 @@
         type="text"
         id="joueur4"
         name="joueur4"
-        placeholder="Pseudonyme"
+        placeholder="Score"
         required
       /><br />
-
-      <input type="submit" value="Commencer la partie" />
+      <button id="start-game">Commencer la partie</button>
+      
     </form>
     <script src="./socket.io/socket.io.min.js"></script>
   </body>
